@@ -1,5 +1,8 @@
 import math
 import os
+import random
+import sys
+sys.setrecursionlimit(99999999)
 
 # colors
 BOLD = '\033[1m'
@@ -28,20 +31,29 @@ WHITE_BG = '\033[47m'
 RESET = '\033[0m'
 class Board:
 
-    def __init__(self, x: int, y: int, mines: int):
+    def __init__(self, x: int, mines: int):
         self.mineBoard = [' ']*x
-        self.isMined = False
         self.startingMineAmt = mines
         self.flags = 0
+        self.status = "run"
 
         for i in range(0, len(self.mineBoard)):
-            self.mineBoard[i] = [False]*y
+            self.mineBoard[i] = [False]*x
+
+        i = 0
+        while i <= self.startingMineAmt:
+            ex = random.randint(0, len(self.mineBoard)-1)
+            ey = random.randint(0, len(self.mineBoard[0])-1)
+            if not self.isMine(ex,ey):
+                print("("+str(ex)+","+str(ey)+")")
+                self.mineBoard[ex][ey] = True
+                i+=1
 
         # make payer board
         self.playerBoard = [' ']*x
 
         for i in range(0, len(self.playerBoard)):
-            self.playerBoard[i] = [' ']*y
+            self.playerBoard[i] = [' ']*x
 
     def printBoard(self):
 
@@ -63,30 +75,30 @@ class Board:
             print(BLACK_BG + RED_TEXT + minesLeft + RESET)
         print()
 
-        if len(str(len(self.playerBoard[0]))) == 2:
+        if len(str(len(self.playerBoard))) == 2:
             print("  ",end="")
         else:
             print(" ",end="")
 
 
-        if len(str(len(self.playerBoard[0]))) >1:
-            for i in range(0, len(self.playerBoard[0])):
+        if len(str(len(self.playerBoard))) >1:
+            for i in range(0, len(self.playerBoard)):
                 if len(str(i)) == 1:
                     print(" ",end="")
                 else:
                     print(str(i)[0],end="")
             print()
-            if len(str(len(self.playerBoard[0]))) == 2:
+            if len(str(len(self.playerBoard))) == 2:
                 print("  ", end="")
             else:
                 print(" ", end="")
-            for i in range(0, len(self.playerBoard[0])):
+            for i in range(0, len(self.playerBoard)):
                 if len(str(i)) == 1:
                     print(i, end="")
                 else:
                     print(str(i)[1], end="")
         else:
-            for i in range(0, len(self.playerBoard[0])):
+            for i in range(0, len(self.playerBoard)):
                 if len(str(i)) == 1:
                     print(i, end="")
                 else:
@@ -95,9 +107,9 @@ class Board:
 
         print()
         b = 0
-        for x in self.playerBoard:
+        for x in range(0, len(self.playerBoard)):
 
-            if len(str(len(x))) > 1:
+            if len(self.playerBoard[0]) > 10:
                 if b < 10:
                     print(" "+str(b), end='')
                 else:
@@ -106,7 +118,8 @@ class Board:
                 print(b, end='')
 
             b += 1
-            for y in x:
+            for h in range(0, len(self.playerBoard)):
+                y = self.playerBoard[h][x]
                 if y == " ":
                  print(GRAY_BG+str(y)+RESET , end='')
                 elif y == "-":
@@ -135,29 +148,29 @@ class Board:
                     print(YELLOW_BG + BLACK_TEXT + BOLD + BLINK + "#" + RESET, end='')
             print(b-1)
 
-        if len(str(len(self.playerBoard[0]))) == 2:
+        if len(str(len(self.playerBoard))) == 2:
             print("  ", end="")
         else:
             print(" ", end="")
 
-        if len(str(len(self.playerBoard[0]))) > 1:
-            for i in range(0, len(self.playerBoard[0])):
+        if len(str(len(self.playerBoard))) > 1:
+            for i in range(0, len(self.playerBoard)):
                 if len(str(i)) == 1:
                     print(" ", end="")
                 else:
                     print(str(i)[0], end="")
             print()
-            if len(str(len(self.playerBoard[0]))) == 2:
+            if len(str(len(self.playerBoard))) == 2:
                 print("  ", end="")
             else:
                 print(" ", end="")
-            for i in range(0, len(self.playerBoard[0])):
+            for i in range(0, len(self.playerBoard)):
                 if len(str(i)) == 1:
                     print(i, end="")
                 else:
                     print(str(i)[1], end="")
         else:
-            for i in range(0, len(self.playerBoard[0])):
+            for i in range(0, len(self.playerBoard)):
                 if len(str(i)) == 1:
                     print(i, end="")
                 else:
@@ -167,11 +180,74 @@ class Board:
 
 
 
-    def tryToDig(self):
-        return True
+    def isMine(self,x:int,y:int):
+        if x < 0:
+            return False
+        if x >= len(self.mineBoard)-1:
+            return False
+        if y < 0:
+            return False
+        if y >= len(self.mineBoard)-1:
+            return False
+        return self.mineBoard[x][y]
+
+    def tryToDig(self, x:int,y:int):
+        if x < 0:
+            return
+        if x >= len(self.mineBoard):
+            return
+        if y < 0:
+            return
+        if y >= len(self.mineBoard[0]):
+            return
+
+        if not (self.playerBoard[x][y] == ' '):
+            return
+
+
+        if self.isMine(x,y):
+            self.status="loss"
+            self.playerBoard[x][y] = "M"
+        else:
+            self.playerBoard[x][y] = "?"
+            sourrond = 0
+            if self.isMine(x-1,y-1):
+                sourrond += 1
+            if self.isMine(x,y-1):
+                sourrond += 1
+            else:
+                self.tryToDig(x,y-1)
+            if self.isMine(x-1,y):
+                sourrond += 1
+            else:
+                self.tryToDig(x-1,y)
+            if self.isMine(x+1,y-1):
+                sourrond += 1
+            if self.isMine(x-1,y+1):
+                sourrond += 1
+            if self.isMine(x+1,y+1):
+                sourrond += 1
+            if self.isMine(x,y+1):
+                sourrond += 1
+            else:
+                self.tryToDig(x,y+1)
+            if self.isMine(x+1,y):
+                sourrond += 1
+            else:
+                self.tryToDig(x+1,y)
+
+            if sourrond == 0:
+                self.playerBoard[x][y] = "-"
+                return
+
+            self.playerBoard[x][y] = str(sourrond)
+
+
+
+
 
 
     def isGameOver(self) -> str:
         #TODO
-        return "run"
+        return self.status
 
