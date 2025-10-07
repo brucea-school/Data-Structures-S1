@@ -41,11 +41,12 @@ class Board:
             self.mineBoard[i] = [False]*x
 
         i = 0
+
         while i <= self.startingMineAmt:
             ex = random.randint(0, len(self.mineBoard)-1)
             ey = random.randint(0, len(self.mineBoard[0])-1)
             if not self.isMine(ex,ey):
-                print("("+str(ex)+","+str(ey)+")")
+                #print("("+str(ex)+","+str(ey)+")")
                 self.mineBoard[ex][ey] = True
                 i+=1
 
@@ -170,6 +171,7 @@ class Board:
                 else:
                     print(str(i)[1], end="")
         else:
+
             for i in range(0, len(self.playerBoard)):
                 if len(str(i)) == 1:
                     print(i, end="")
@@ -201,7 +203,7 @@ class Board:
         if y >= len(self.mineBoard[0]):
             return
 
-        if not (self.playerBoard[x][y] == ' '):
+        if not (self.playerBoard[x][y] == ' ' or self.playerBoard[x][y] == 'F'):
             return
 
 
