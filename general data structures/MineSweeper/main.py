@@ -1,6 +1,15 @@
+"""
+I RECOMMEND CHANGING YOUR TERMINAL FONT HEIGHT TO 0.6 FOR BETTER READABILITY
+"""
+
 from board import *
 
-print("input board size(must be more than 10):")
+print(RED_BG+"HEY!"+RESET)
+print(RED_TEXT+"I RECOMMEND CHANGING YOUR TERMINAL FONT HEIGHT TO 0.6 FOR BETTER READABILITY")
+print("see Settings > Editor > Console Scheme > Console Font"+RESET)
+print("\n"*3)
+
+print("input board size  "+GRAY_TEXT+"(must be more than 10 and less than 100):"+RESET)
 size = int( input())
 print("input board mines#:")
 mines = int(input())
@@ -12,6 +21,9 @@ lastRoundStatus = ""
 brd.playerBoard[4][6] = "F"
 
 while brd.isGameOver() == "run":
+
+
+
     print("\n"*50)
 
     brd.printBoard()
@@ -23,6 +35,8 @@ while brd.isGameOver() == "run":
         print()
     print("what do you want to do?:     "+GRAY_TEXT+"(you can type "+BOLD+"help"+RESET+GRAY_TEXT+" for help)"+RESET)
     intake = input()
+
+    #inkae commands
 
     if intake.startswith("d"):
         xwant = int(input("x cord?:"))
@@ -74,9 +88,22 @@ while brd.isGameOver() == "run":
             lastRoundStatus = RESET + BLACK_TEXT + YELLOW_BG + "Flag added" + RESET
         else:
             lastRoundStatus = "UNABLE TO FLAG THERE!"
+    elif intake.startswith("e"):
+        print("\n"*100)
+        print("GOOD BYE!!!")
+        exit("fun fact: you can have any value as a exit code")
+
     elif intake.startswith("help"):
-        #TODO!!!
-        pass
+        print("\n"*100)
+        print(CYAN_TEXT+"💣MINESWEEPER💣"+ RESET + GRAY_TEXT + "           if you dont know how to play: look it up")
+        print("")
+        print(GREEN_TEXT+"COMMANDS"+RESET)
+        print(BLUE_TEXT+"d - dig"+RESET)
+        print(CYAN_TEXT + "dc - dig without confirm"+RESET)
+        print(YELLOW_TEXT+"f - add a flag"+RESET)
+        print(RED_TEXT+"e - leave"+RESET)
+        input("press enter to continue")
+
     else:
         lastRoundStatus = "COMMAND DOSE NOT EXIST!"
 brd.printBoard()

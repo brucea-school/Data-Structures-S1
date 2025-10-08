@@ -58,7 +58,7 @@ class Board:
 
     def printBoard(self):
 
-
+        #print face
         if (self.isGameOver() == "run"):
             print("🙂")
         elif (self.isGameOver() == "loss"):
@@ -76,6 +76,7 @@ class Board:
             print(BLACK_BG + RED_TEXT + minesLeft + RESET)
         print()
 
+        #print numbers
         if len(str(len(self.playerBoard))) == 2:
             print("  ",end="")
         else:
@@ -120,13 +121,14 @@ class Board:
 
             b += 1
             for h in range(0, len(self.playerBoard)):
+                #print actual board
                 y = self.playerBoard[h][x]
                 if y == " ":
                  print(GRAY_BG+str(y)+RESET , end='')
                 elif y == "-":
                     print(BLACK_BG + " " + RESET, end='')
                 elif y == "F":
-                    print(RED_TEXT + "⚑" + RESET, end='')
+                    print(RED_TEXT+ GRAY_BG + "⚑" + RESET, end='')
                 elif str(y) == "1":
                     print(BLACK_BG + BLUE_TEXT + "1" + RESET, end='')
                 elif str(y) == "2":
@@ -183,46 +185,48 @@ class Board:
 
 
     def isMine(self,x:int,y:int):
+        #is out of range?
         if x < 0:
             return False
-        if x >= len(self.mineBoard)-1:
+        if x >= len(self.mineBoard):
             return False
         if y < 0:
             return False
-        if y >= len(self.mineBoard)-1:
+        if y >= len(self.mineBoard[0]):
             return False
+        # check mine
         return self.mineBoard[x][y]
 
     def tryToDig(self, x:int,y:int):
+        # is out of range?
         if x < 0:
             return
-        if x >= len(self.mineBoard):
+        if x > len(self.mineBoard)-1:
             return
         if y < 0:
             return
-        if y >= len(self.mineBoard[0]):
+        if y > len(self.mineBoard[0])-1:
             return
 
+        # are you checked alerdy?
         if not (self.playerBoard[x][y] == ' ' or self.playerBoard[x][y] == 'F'):
             return
 
 
         if self.isMine(x,y):
+            # KABOOM!
             self.status="loss"
             self.playerBoard[x][y] = "M"
         else:
+            #scan for mines
             self.playerBoard[x][y] = "?"
             sourrond = 0
             if self.isMine(x-1,y-1):
                 sourrond += 1
             if self.isMine(x,y-1):
                 sourrond += 1
-            else:
-                self.tryToDig(x,y-1)
             if self.isMine(x-1,y):
                 sourrond += 1
-            else:
-                self.tryToDig(x-1,y)
             if self.isMine(x+1,y-1):
                 sourrond += 1
             if self.isMine(x-1,y+1):
@@ -231,18 +235,26 @@ class Board:
                 sourrond += 1
             if self.isMine(x,y+1):
                 sourrond += 1
-            else:
-                self.tryToDig(x,y+1)
             if self.isMine(x+1,y):
                 sourrond += 1
-            else:
-                self.tryToDig(x+1,y)
+
+
 
             if sourrond == 0:
+                #if you are a blank space
                 self.playerBoard[x][y] = "-"
+                self.tryToDig(x + 1,y)
+                self.tryToDig(x - 1, y)
+                self.tryToDig(x, y+1)
+                self.tryToDig(x, y - 1)
+                self.tryToDig(x + 1, y-1)
+                self.tryToDig(x - 1, y + 1)
+                self.tryToDig(x - 1, y - 1)
+                self.tryToDig(x + 1, y + 1)
                 return
-
-            self.playerBoard[x][y] = str(sourrond)
+            else:
+                #add number
+                self.playerBoard[x][y] = str(sourrond)
 
 
 
@@ -250,6 +262,13 @@ class Board:
 
 
     def isGameOver(self) -> str:
-        #TODO
-        return self.status
+        #check for win
+        for x in range(0, len(self.mineBoard)):
+            for y in range(0, len(self.mineBoard[0])):
+                if self.playerBoard[x][y] == 'F' or self.playerBoard[x][y] == ' ':
+                    if not( self.isMine(x,y)):
+                        #just retun the current status
+                        return  self.status
+
+        return "win"
 
