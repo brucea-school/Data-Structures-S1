@@ -18,8 +18,6 @@ brd = Board(size,mines)
 
 lastRoundStatus = ""
 
-brd.playerBoard[4][6] = "F"
-
 while brd.isGameOver() == "run":
 
 
