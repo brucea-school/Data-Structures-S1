@@ -51,4 +51,6 @@ def ct():
 
             print(RESET+CROSSOUT+"crossout"+RESET+BOLD+" bold "+RESET+ITALIC+"italic "+RESET+UNDERLINE+"unerline"+RESET)
 
+ct()
+
 
