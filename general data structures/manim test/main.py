@@ -1,9 +1,9 @@
-import manim
-class SquareToCircle(manim.Scene):
-    def construct(self):
-        circle = manim.Circle()
-        circle.set_fill(manim.BLUE, opacity=0.5)
-        circle.set_stroke(manim.BLUE_E, width=4)
+def go(x,y):
+    if x>y:
+        return go(x-1,y+2)+3
+    elif x<y:
+        return 2*go(x+1,y-1)-5
+    else:
+        return x*x+y
 
-        self.add(circle)
-
+print(go(12,7))
