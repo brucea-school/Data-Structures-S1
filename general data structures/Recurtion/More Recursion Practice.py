@@ -37,16 +37,13 @@ def recursive_search(item, my_list:list):
     else:
         return recursive_search(item,my_list[1:])
 
-def better_fib_helper(n, a, b):
+def better_fib(n, a=1, b=1):
     if n == 1:
         return a
     if n == 2:
         return b
     print("call x2")
-    return better_fib_helper(n - 1, b, a + b)
-
-def better_fib(n):
-    return better_fib_helper(n, 1, 1)
+    return better_fib(n - 1, b, a + b)
 
 print("Enter an integer:")
 n = int(input())
