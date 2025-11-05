@@ -17,11 +17,15 @@ def randomTree(r,len,size,x,y,dir,first=False, perfect=False):
         x + (len * math.sin(dir + randomNumThing)),
         y + (len * math.cos(dir + randomNumThing))
     )
-    Line(Point(x, y), nextPoint)._draw(win, {"width": size,"fill":"black"})
+    if r < 5:
+        Line(Point(x, y), nextPoint)._draw(win, {"width": size,"fill":"green"})
+    else:
+        Line(Point(x, y), nextPoint)._draw(win, {"width": size, "fill": "burlywood4"})
 
-    randomTree(r - 1, len / 1.5, size / 1.5, nextPoint.x, nextPoint.y, dir - (math.pi / 4),perfect=perfect)
-    randomTree(r - 1, len / 1.5, size / 1.5, nextPoint.x, nextPoint.y, dir,perfect=perfect)
-    randomTree(r - 1, len / 1.5, size / 1.5, nextPoint.x, nextPoint.y, dir + (math.pi / 4),perfect=perfect)
+    randomTree(r - 1, len / 1.5+random.random()/2, size / 1.5+random.random()/2, nextPoint.x, nextPoint.y, dir - (math.pi / 4),perfect=perfect)
+    randomTree(r - 1, len / 1.5+random.random()/2, size / 1.5+random.random()/2, nextPoint.x, nextPoint.y, dir,perfect=perfect)
+    randomTree(r - 1, len / 1.5+random.random()/2, size / 1.5+random.random()/2, nextPoint.x, nextPoint.y, dir + (math.pi / 4),perfect=perfect)
+    randomTree(r - 1, len / 1.2, size / 1.2, nextPoint.x, nextPoint.y, dir+(randomNumThing*random.random()), perfect=perfect)
 
 
 win = GraphWin("My Circle", 1000, 1000)  # Creates a window 1000 x 800 pixels
