@@ -5,7 +5,17 @@ win = GraphWin("My Circle", 1000*math.sqrt(3), 1000*2)  # Creates a window 1000 
 win.setBackground("white")
 
 
-def theCube(r, x, first=True, plusBoxPos=None,vary=None):
+def theCube(r, x, first=True, plusBoxPos=None,vary=None,wih=1.0):
+    """
+    Creats a cube with some cool stuff
+    :param r: repetition
+    :param x: size of the side of the cube
+    :param first: render cube?
+    :param plusBoxPos: if not first then render a + between the 4 points provided
+    :param vary: the - of all the 4 different regions
+    :param wih: width of lines
+    :return: nothing.
+    """
     if r <= 0:
         return None
 
@@ -17,20 +27,20 @@ def theCube(r, x, first=True, plusBoxPos=None,vary=None):
     if first:
         #WE ARE DOING RED TEXT
         b = math.floor(math.sqrt(3)*x)
-        Line(Point(0, x/2), Point(b/2,0))._draw(win, {"width": 1, "fill": "black"})
-        Line(Point(b/2,0), Point(b, x/2))._draw(win, {"width": 1, "fill": "black"})
-        Line(Point(0, x / 2), Point(b/2, x))._draw(win, {"width": 1, "fill": "black"})
-        Line(Point(b/2,x), Point(b, x/2))._draw(win, {"width": 1, "fill": "black"})
-        Line(Point(b, x/2), Point(b, x*1.5))._draw(win, {"width": 1, "fill": "black"})
-        Line(Point(b,x*1.5), Point(b/2,x*2))._draw(win, {"width": 1, "fill": "black"})
-        Line(Point(b/2,x*2), Point(0, x*1.5))._draw(win, {"width": 1, "fill": "black"})
-        Line(Point(b / 2, x*2), Point(b/2,x))._draw(win, {"width": 1, "fill": "black"})
-        Line(Point(0, x*1.5), Point(0, x/2))._draw(win, {"width": 1, "fill": "black"})
-        theCube(r, x, first=False, plusBoxPos=[Point(0, x/2),Point(b/2,x),Point(0, x*1.5),Point(b/2,x*2)], vary=vary)
+        Line(Point(0, x/2), Point(b/2,0))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(b/2,0), Point(b, x/2))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(0, x / 2), Point(b/2, x))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(b/2,x), Point(b, x/2))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(b, x/2), Point(b, x*1.5))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(b,x*1.5), Point(b/2,x*2))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(b/2,x*2), Point(0, x*1.5))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(b / 2, x*2), Point(b/2,x))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(0, x*1.5), Point(0, x/2))._draw(win, {"width": wih, "fill": "black"})
+        theCube(r, x, first=False, plusBoxPos=[Point(0, x/2),Point(b/2,x),Point(0, x*1.5),Point(b/2,x*2)], vary=vary,wih=wih)
         theCube(r, x, first=False,
-                plusBoxPos=[Point(b, x / 2), Point(b / 2, x), Point(b/2,0), Point(0,x/2)], vary=vary)
+                plusBoxPos=[Point(b, x / 2), Point(b / 2, x), Point(b/2,0), Point(0,x/2)], vary=vary,wih=wih)
         theCube(r, x, first=False,
-                plusBoxPos=[Point(b, x / 2), Point(b / 2, x), Point(b, x * 1.5), Point(b / 2, x * 2)], vary=vary)
+                plusBoxPos=[Point(b, x / 2), Point(b / 2, x), Point(b, x * 1.5), Point(b / 2, x * 2)], vary=vary,wih=wih)
     else:
         l0 = Line(plusBoxPos[0],plusBoxPos[1])
         l1 = Line(plusBoxPos[2], plusBoxPos[3])
@@ -40,13 +50,13 @@ def theCube(r, x, first=True, plusBoxPos=None,vary=None):
         l3 = Line(plusBoxPos[1], plusBoxPos[3])
         rl1 = Line(l2.getCenter(), l3.getCenter())
 
-        rl0._draw(win,{"width": 1, "fill": "black"})
-        rl1._draw(win,{"width": 1, "fill": "black"})
+        rl0._draw(win,{"width": wih, "fill": "black"})
+        rl1._draw(win,{"width": wih, "fill": "black"})
 
-        theCube(r-vary[0], x, first=False, plusBoxPos=[l0.getCenter(),plusBoxPos[1],rl0.getCenter(),l3.getCenter()], vary=vary)
-        theCube(r - vary[1], x, first=False, plusBoxPos=[l2.getCenter(), rl0.getCenter(), plusBoxPos[2], l1.getCenter()], vary=vary)
-        theCube(r - vary[2], x, first=False, plusBoxPos=[plusBoxPos[0], l0.getCenter(), l2.getCenter(),rl0.getCenter()], vary=vary)
-        theCube(r - vary[3], x, first=False, plusBoxPos=[rl0.getCenter(), l3.getCenter(), l1.getCenter(), plusBoxPos[3]], vary=vary)
+        theCube(r-vary[0], x, first=False, plusBoxPos=[l0.getCenter(),plusBoxPos[1],rl0.getCenter(),l3.getCenter()], vary=vary,wih=wih)
+        theCube(r - vary[1], x, first=False, plusBoxPos=[l2.getCenter(), rl0.getCenter(), plusBoxPos[2], l1.getCenter()], vary=vary,wih=wih)
+        theCube(r - vary[2], x, first=False, plusBoxPos=[plusBoxPos[0], l0.getCenter(), l2.getCenter(),rl0.getCenter()], vary=vary,wih=wih)
+        theCube(r - vary[3], x, first=False, plusBoxPos=[rl0.getCenter(), l3.getCenter(), l1.getCenter(), plusBoxPos[3]], vary=vary,wih=wih)
 
 
 
@@ -60,9 +70,17 @@ vary key
 - + -
 1 | 3
 
+show off:
+1,999,999,999 - bad
+1,1,999,999 - solid rock paper
+1,2,999,999 - rock paper
+1,4,2,2 - complex
+1,2,3,3 - fancy complex
+1,999,1,1 - sierpinski
+1,2,1,1 - open gl be like
 """
 
-theCube(10,500,vary=[1,999,999,999])
+theCube(10,500,vary=[1,4,2,2],wih=3)
 
 win.getMouse()  # Pause to view result
 win.close()  # Close window when done
