@@ -5,7 +5,7 @@ win = GraphWin("My Circle", 1000*math.sqrt(3), 1000*2)  # Creates a window 1000 
 win.setBackground("white")
 
 
-def theCube(r, x, first=True, plusBoxPos=None,vary=None,wih=1.0):
+def theCube(r, x, first=True, plusBoxPos=None,vary=None,wih=1.0,color="black"):
     """
     Creats a cube with some cool stuff
     :param r: repetition
@@ -14,6 +14,7 @@ def theCube(r, x, first=True, plusBoxPos=None,vary=None,wih=1.0):
     :param plusBoxPos: if not first then render a + between the 4 points provided
     :param vary: the - of all the 4 different regions
     :param wih: width of lines
+    :param color: the color of the lines
     :return: nothing.
     """
     if r <= 0:
@@ -27,15 +28,15 @@ def theCube(r, x, first=True, plusBoxPos=None,vary=None,wih=1.0):
     if first:
         #WE ARE DOING RED TEXT
         b = math.floor(math.sqrt(3)*x)
-        Line(Point(0, x/2), Point(b/2,0))._draw(win, {"width": wih, "fill": "black"})
-        Line(Point(b/2,0), Point(b, x/2))._draw(win, {"width": wih, "fill": "black"})
-        Line(Point(0, x / 2), Point(b/2, x))._draw(win, {"width": wih, "fill": "black"})
-        Line(Point(b/2,x), Point(b, x/2))._draw(win, {"width": wih, "fill": "black"})
-        Line(Point(b, x/2), Point(b, x*1.5))._draw(win, {"width": wih, "fill": "black"})
-        Line(Point(b,x*1.5), Point(b/2,x*2))._draw(win, {"width": wih, "fill": "black"})
-        Line(Point(b/2,x*2), Point(0, x*1.5))._draw(win, {"width": wih, "fill": "black"})
-        Line(Point(b / 2, x*2), Point(b/2,x))._draw(win, {"width": wih, "fill": "black"})
-        Line(Point(0, x*1.5), Point(0, x/2))._draw(win, {"width": wih, "fill": "black"})
+        Line(Point(0, x/2), Point(b/2,0))._draw(win, {"width": wih, "fill": color})
+        Line(Point(b/2,0), Point(b, x/2))._draw(win, {"width": wih, "fill": color})
+        Line(Point(0, x / 2), Point(b/2, x))._draw(win, {"width": wih, "fill": color})
+        Line(Point(b/2,x), Point(b, x/2))._draw(win, {"width": wih, "fill": color})
+        Line(Point(b, x/2), Point(b, x*1.5))._draw(win, {"width": wih, "fill": color})
+        Line(Point(b,x*1.5), Point(b/2,x*2))._draw(win, {"width": wih, "fill": color})
+        Line(Point(b/2,x*2), Point(0, x*1.5))._draw(win, {"width": wih, "fill": color})
+        Line(Point(b / 2, x*2), Point(b/2,x))._draw(win, {"width": wih, "fill": color})
+        Line(Point(0, x*1.5), Point(0, x/2))._draw(win, {"width": wih, "fill": color})
         theCube(r, x, first=False, plusBoxPos=[Point(0, x/2),Point(b/2,x),Point(0, x*1.5),Point(b/2,x*2)], vary=vary,wih=wih)
         theCube(r, x, first=False,
                 plusBoxPos=[Point(b, x / 2), Point(b / 2, x), Point(b/2,0), Point(0,x/2)], vary=vary,wih=wih)
@@ -50,8 +51,8 @@ def theCube(r, x, first=True, plusBoxPos=None,vary=None,wih=1.0):
         l3 = Line(plusBoxPos[1], plusBoxPos[3])
         rl1 = Line(l2.getCenter(), l3.getCenter())
 
-        rl0._draw(win,{"width": wih, "fill": "black"})
-        rl1._draw(win,{"width": wih, "fill": "black"})
+        rl0._draw(win,{"width": wih, "fill": color})
+        rl1._draw(win,{"width": wih, "fill": color})
 
         theCube(r-vary[0], x, first=False, plusBoxPos=[l0.getCenter(),plusBoxPos[1],rl0.getCenter(),l3.getCenter()], vary=vary,wih=wih)
         theCube(r - vary[1], x, first=False, plusBoxPos=[l2.getCenter(), rl0.getCenter(), plusBoxPos[2], l1.getCenter()], vary=vary,wih=wih)
