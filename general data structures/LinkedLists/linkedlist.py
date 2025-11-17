@@ -20,12 +20,16 @@ class LinkedList:
         self.head = None
         self.tail = None
 
+    def __len__(self):
+        return self.length
+
     def insert_at_start(self,val):
         b = Node(val)
         b.set_next(self.head)
         self.head = b
         if self.tail is None:
             self.tail = b
+        self.length += 1
 
     def insert_at_end(self,val):
         b = Node(val)
@@ -36,6 +40,8 @@ class LinkedList:
             self.tail.set_next(b)
             self.tail = b
 
+        self.length += 1
+
     def empty(self):
         return self.head is None
 
@@ -45,6 +51,8 @@ class LinkedList:
             self.head = None
         else:
             self.head = self.head.next
+
+        self.length -= 1
     def __str__(self):
         s = "["
         n = self.head

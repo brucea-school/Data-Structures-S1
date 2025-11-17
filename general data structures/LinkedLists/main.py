@@ -63,3 +63,14 @@ assert not l3.tail
 assert l3.empty()
 print("delete_at_start(), empty() work as intended.")
 
+l4 = LinkedList()
+assert len(l4) == 0
+l4.insert_at_start("a")
+assert len(l4) == 1
+l4.insert_at_end("b")
+assert len(l4) == 2
+l4.delete_at_start()
+assert len(l4) == 1
+print("__len__() works as intended.")
+
+
