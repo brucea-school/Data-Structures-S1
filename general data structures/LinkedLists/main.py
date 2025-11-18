@@ -72,5 +72,73 @@ assert len(l4) == 2
 l4.delete_at_start()
 assert len(l4) == 1
 print("__len__() works as intended.")
+c = LinkedList()
+
+c.insert_at_end("c")
+c.insert_at_end("o")
+c.insert_at_end("m")
+c.insert_at_end("p")
+c.insert_at_end("u")
+c.insert_at_end("t")
+c.insert_at_end("e")
+c.insert_at_end("r")
+assert c[0] == "c"
+assert c[7] == "r"
+put = ""
+for i in range(3, 6):
+    put += c[i]
+print("put is " + put)
+assert put == "put"
+print("__getitem__() works as intended.")
+b = LinkedList()
+b.insert(0, "m")
+b.insert(0, "o")
+b.insert(2, "u")
+b.insert(3, "r")
+b.insert(0, "c")
+b.insert(4, "e")
+b.insert(3, "p")
+b.insert(5, "t")
+assert not b.empty()
+assert len(b) == 8
+
+computer = ""
+for i in range(8):
+    computer += b[i]
+print("computer is " + computer)
+
+print("insert() works as intended.")
+
+b.insert(8, "s")
+b.delete_at_end()
+computer = ""
+for i in range(8):
+    computer += b[i]
+assert computer == "computer"
+a = LinkedList()
+a.insert(0, "q")
+a.insert(1, "u")
+a.delete_at_end()
+assert a.head == a.tail
+a.delete_at_end()
+assert a.head == None
+assert a.tail == None
+
+print("delete_at_end() works as intended.")
+
+b.delete(6)
+b.delete(6)
+b.delete(0)
+b.delete(1)
+b.delete(1)
+assert len(b) == 3
+
+out = ""
+for i in range(3):
+    out += b[i]
+print("out is " + out)
+assert out == "out"
+print("delete() works as intended.")
+
 
 

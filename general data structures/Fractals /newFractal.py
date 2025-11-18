@@ -81,7 +81,7 @@ show off:
 1,2,1,1 - open gl be like
 """
 
-theCube(10,500,vary=[1,2,1,1],wih=1)
+theCube(10,500,vary=[999,999,1,1],wih=1)
 
 win.getMouse()  # Pause to view result
 win.close()  # Close window when done
