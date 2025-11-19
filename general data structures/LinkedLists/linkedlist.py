@@ -121,19 +121,28 @@ class LinkedList:
     def delete(self,ind):
         self.length -= 1
         if self.head is self.tail:
-            self.head =None
-            self.tail =None
+            self.head = None
+            self.tail = None
             return
 
         if ind == 0:
             self.head = self.head.get_next()
+            return
 
         if self.get_node(ind) is self.tail:
+            self.get_node(ind - 1).set_next(None)
             self.tail = self.get_node(ind-1)
-            self.get_node(ind-1).set_next(None)
+            return
+        self.get_node(ind-1).set_next(self.get_node(ind+1))
 
+    def __contains__(self, item):
+        i = 0
+        while i<self.length:
+            if self.__getitem__(i) == item:
+                return True
+            i += 1
 
-        self.get_node(ind+1).set_next(self.get_node(ind-1))
+        return False
 
     def __str__(self):
         s = "["

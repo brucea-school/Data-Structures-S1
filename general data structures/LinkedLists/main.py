@@ -140,5 +140,11 @@ print("out is " + out)
 assert out == "out"
 print("delete() works as intended.")
 
+assert "t" in b
+assert "t" in b
+assert "o" in b
+assert "u" in b
+assert "c" not in b
+print("__contains__() works as intended.")
 
 
