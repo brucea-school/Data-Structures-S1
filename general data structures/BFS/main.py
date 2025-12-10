@@ -37,6 +37,8 @@ def shortest_path(s1_name, s2_name):
                 to_visit.enqueue(scan + [i])
 
         visited.append(scan_node)
+    raise ValueError("no link between "+s1_name+" and "+s2_name)
+
 def shortest_path_length(s1_name, s2_name):
     return len(shortest_path(s1_name,s2_name))-1
 
