@@ -89,7 +89,7 @@ if len(sys.argv) > 1:
 
         else:
             #failed status
-            print(colors.RGBText(255,0,0)+"page "+sys.argv[1]+" not found"+colors.RESET)
+            print(colors.RGBText(255,0,0)+"page not found"+colors.RESET)
 else:
     print("WIKI CLI "+VERSION)
     print()
