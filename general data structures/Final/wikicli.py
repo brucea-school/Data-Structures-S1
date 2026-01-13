@@ -2,6 +2,7 @@ import sys
 import requests
 import colors
 import textwrap
+import os
 import json
 from bs4 import BeautifulSoup
 session = requests.session()
@@ -13,39 +14,24 @@ session.headers.update({
 def getSummary(page):
     return session.get("https://en.wikipedia.org/api/rest_v1/page/summary/"+page)
 
-def formatBasicHtml(html:str) -> str:
+def formatBasicHtml(html:str,page:str=None) -> str:
     c = html
-    c = c.replace("<p>","")
-    c = c.replace("</p>", colors.RESET)
-    c = c.replace("<b>", colors.BOLD)
-    c = c.replace("</b>", colors.RESET)
-    c = c.replace("<strong>", colors.BOLD)
-    c = c.replace("</strong>", colors.RESET)
-    c = c.replace("<i>", colors.ITALIC)
-    c = c.replace("</i>", colors.RESET)
-    c = c.replace("<em>", colors.ITALIC)
-    c = c.replace("</em>", colors.RESET)
-    c = c.replace("<mark>", colors.RGBText(255,255,0))
-    c = c.replace("</mark>", colors.RESET)
-    c = c.replace("<small>", "")
-    c = c.replace("</small>", "")
-    c = c.replace("<del>", colors.CROSSOUT)
-    c = c.replace("</del>", colors.RESET)
-    c = c.replace("<ins>", colors.UNDERLINE)
-    c = c.replace("</ins>", colors.RESET)
-    c = c.replace("<sub>", "")
-    c = c.replace("</sub>", "")
-    c = c.replace("<sup>", "")
-    c = c.replace("</sup>", "")
-    c = c.replace("<u>", colors.UNDERLINE)
-    c = c.replace("</u>", colors.RESET)
-    c = c.replace("<code>", colors.RGBText(100,100,100))
-    c = c.replace("</code>", colors.RESET)
-    c = c.replace("<kbd>", "")
-    c = c.replace("</kbd>", "")
-    c = c.replace("<span>", "")
-    c = c.replace("</span>", "")
+
     soup = BeautifulSoup(c, "html.parser")
+    for link in soup.find_all("a"):
+        if page is not None:
+            if "./" in link.get('href'):
+                link.replace_with(colors.link("https://en.wikipedia.org/wiki/"+link.get('href'),link.getText(strip=True)))
+            elif "#" in link.get('href'):
+                link.replace_with(colors.link("https://en.wikipedia.org/wiki/"+page+link.get('href'), link.getText(strip=True)))
+            else:
+                link.replace_with(colors.link(link.get('href'), link.getText(strip=True)))
+        else:
+            link.replace_with(colors.link(link.get('href'), link.getText(strip=True)))
+    if page is not None:
+        for text in soup.find_all("p"):
+            print(text.text+"\n")
+
     return soup.getText(strip=True)
 
 
@@ -53,15 +39,25 @@ if len(sys.argv) > 1:
     if sys.argv[1] == "-h":
         print("WIP")
     else:
+        long = False
+        if (len(sys.argv)>2 and sys.argv[1] == "-l"):
+            want = getSummary(sys.argv[2])
+            long = True
+        else:
+            want = getSummary(sys.argv[1])
 
-        want = getSummary(sys.argv[1])
         if want.status_code == 200:
             content = want.json()
-            print(colors.BOLD + content["title"]+colors.RESET)
+            print(colors.BOLD  + content["title"])
             print("-"*50)
-            print(textwrap.fill(formatBasicHtml( content["extract_html"])))
-            imgtxt = session.get(content["thumbnail"]["source"])
-            print(imgtxt.text)
+            print(colors.RESET +textwrap.fill(formatBasicHtml( content["extract_html"])))
+            print(colors.link(content["content_urls"]["desktop"]["page"],"see on Wikipedia"))
+            if long:
+                l = session.get("https://en.wikipedia.org/api/rest_v1/page/html/" + sys.argv[2])
+                formatBasicHtml(l.text,content["title"])
+
+
+
         else:
             #failed status
             print(colors.RGBText(255,0,0)+"page "+sys.argv[1]+" not found"+colors.RESET)

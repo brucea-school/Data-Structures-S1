@@ -35,6 +35,9 @@ def textToRGBBackGround(text: str, R: int, G: int, B: int, bold=False, italic=Fa
 
     return header + RGBBackGround(R, G, B) + text + RESET
 
+def link(link:str,text:str):
+    return UNDERLINE+RGBText(51, 68, 255)+"\033]8;;"+link+"\033\\"+text+"\033]8;;\033\\"+RESET
+
 
 RESET = "\033[0m"
 BOLD = "\033[1m"
