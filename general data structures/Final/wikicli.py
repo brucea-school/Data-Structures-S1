@@ -5,11 +5,25 @@ import textwrap
 import os
 import json
 from bs4 import BeautifulSoup
+import pyfiglet
+import shutil
+
+
+
 session = requests.session()
 VERSION = "v0.0.0 BETA"
 session.headers.update({
     'User-Agent': 'wiki map 1.0 (brucea28@gfacademy.org)'
 })
+
+def get_width():
+    try:
+        # Get the terminal size
+        size = shutil.get_terminal_size()
+        return size.columns
+    except OSError:
+        # Provide a default width if running in an environment without a terminal
+        return 80
 
 def getSummary(page):
     return session.get("https://en.wikipedia.org/api/rest_v1/page/summary/"+page)
@@ -41,19 +55,30 @@ def formatBasicHtml(html:str,page:str=None) -> str:
 
 if len(sys.argv) > 1:
     if sys.argv[1] == "-h":
-        print("WIP")
+        print("WIKI CLI "+VERSION)
+        print("a wikipedia in the command line")
+        print()
+        print("usage:")
+        print("wikicli <page>       quick summary of a page")
+        print("wikicli -l <page>    trys to replicate the page to the terminal")
     else:
         long = False
-        if (len(sys.argv)>2 and sys.argv[1] == "-l"):
-            want = getSummary(sys.argv[2])
-            long = True
+        if (sys.argv[1] == "-l"):
+            if (len(sys.argv)>2):
+                want = getSummary(sys.argv[2])
+                long = True
+            else:
+                print(colors.textToRGBText("for what page???",255,0,0))
+                sys.exit(0)
+
         else:
             want = getSummary(sys.argv[1])
 
         if want.status_code == 200:
             content = want.json()
-            print(colors.BOLD  + content["title"])
-            print("-"*50)
+            result = pyfiglet.figlet_format(content["title"])
+            print(colors.BOLD+result)
+            print("-"*get_width())
             print(colors.RESET +textwrap.fill(formatBasicHtml( content["extract_html"])))
             print(colors.link(content["content_urls"]["desktop"]["page"],"see on Wikipedia"))
             if long:
