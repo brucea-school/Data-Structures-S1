@@ -28,6 +28,10 @@ def formatBasicHtml(html:str,page:str=None) -> str:
                 link.replace_with(colors.link(link.get('href'), link.getText(strip=True)))
         else:
             link.replace_with(colors.link(link.get('href'), link.getText(strip=True)))
+
+    for bold in soup.find_all("b"):
+        bold.replace_with(colors.BOLD+bold.text+colors.RESET)
+
     if page is not None:
         for text in soup.find_all("p"):
             print(text.text+"\n")
